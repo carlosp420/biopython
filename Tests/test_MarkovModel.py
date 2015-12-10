@@ -23,6 +23,34 @@ with warnings.catch_warnings():
 
 class TestMarkovModel(unittest.TestCase):
 
+    def test_str(self):
+        states = ["0", "1", "2", "3"]
+        alphabet = ["A", "C", "G", "T"]
+        p_initial = array([1.0, 0, 0, 0])
+        p_transition = array(
+            [
+                [0.2, 0.8, 0, 0],
+                [0, 0.5, 0.5, 0],
+                [0, 0, 0.5, 0.5],
+                [0, 0, 0, 1]
+            ]
+        )
+        p_emission = array(
+            [
+                [0.6, 0.1, 0.1, 0.1],
+                [0.08, 0.75, 0.08, 0.08],
+                [0.08, 0.08, 0.75, 0.08],
+                [0.03, 0.03, 0.03, 0.9]
+            ]
+        )
+        markov_model = MarkovModel.MarkovModel(states, alphabet, p_initial,
+                                               p_transition, p_emission)
+        self.assertTrue("STATES" in markov_model.__str__())
+        self.assertTrue("ALPHABET" in markov_model.__str__())
+        self.assertTrue("INITIAL" in markov_model.__str__())
+        self.assertTrue("TRANSITION" in markov_model.__str__())
+        self.assertTrue("EMISSION" in markov_model.__str__())
+
     def test_train_visible(self):
         states = ["0", "1", "2", "3"]
         alphabet = ["A", "C", "G", "T"]
@@ -123,7 +151,7 @@ class TestMarkovModel(unittest.TestCase):
                                     )
         p_initial, p_transition, p_emission = x
         markov_model = MarkovModel.MarkovModel(states, alphabet,
-                                     p_initial, p_transition, p_emission)
+                                               p_initial, p_transition, p_emission)
         self.assertEqual(markov_model.states, ['CP', 'IP'])
         self.assertEqual(markov_model.alphabet, ['cola', 'ice_t', 'lem'])
         self.assertEqual(len(markov_model.p_initial), 2)
